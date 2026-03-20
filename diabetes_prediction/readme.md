@@ -1,134 +1,200 @@
-🩺 Diabetes Prediction Using Machine Learning (Support Vector Machine)
-🌟 Project Overview
+# Diabetes Prediction Using Support Vector Machine
+
+Binary classification model that predicts whether a patient is diabetic based on clinical health indicators, trained on the PIMA Indian Diabetes Dataset.
+
+---
+
+## Problem Statement
+
+Early detection of diabetes is critical for effective treatment and prevention of complications. Clinical diagnosis often requires specialist review and repeated testing. This project automates the initial screening process using a machine learning model trained on real-world medical data, enabling fast and data-driven risk assessment.
+
+---
+
+## Solution Overview
+
+An SVM classifier with a linear kernel is trained on 768 patient records, each containing 8 health parameters. The trained model accepts new patient input, standardizes the values, and returns a prediction — diabetic or non-diabetic — with accuracy validated on a held-out test set.
+
+---
+
+## Tech Stack
+
+| Category | Tools |
+|---|---|
+| Language | Python |
+| Data Handling | Pandas, NumPy |
+| Preprocessing | Scikit-learn (StandardScaler) |
+| Model | Scikit-learn (SVM — LinearSVC) |
+| Evaluation | Scikit-learn (accuracy_score) |
+| Environment | Jupyter Notebook / Google Colab |
 
-In this project, I built a machine learning model to predict whether a person is diabetic or not based on various medical parameters such as glucose level, blood pressure, BMI, age, etc.
-I used the Support Vector Machine (SVM) algorithm — one of the most powerful supervised learning models for classification tasks.
+---
 
-The main goal was to train the system using real-world medical data and then create a predictive system that can identify diabetic patients accurately.
+## Dataset
 
-🧩 Step 1: Importing the Required Dependencies
+- **Name**: PIMA Indian Diabetes Dataset
+- **Source**: UCI Machine Learning Repository / Kaggle
+- **Samples**: 768 female patients
+- **Features**: 8 clinical parameters
+- **Target**: `Outcome` — 0 (Non-Diabetic) or 1 (Diabetic)
+- **File**: `diabetes.csv`
 
-To start with, I imported all the essential Python libraries that support data processing, visualization, and model training.
+| Feature | Description |
+|---|---|
+| Pregnancies | Number of pregnancies |
+| Glucose | Plasma glucose concentration |
+| BloodPressure | Diastolic blood pressure (mm Hg) |
+| SkinThickness | Triceps skinfold thickness (mm) |
+| Insulin | 2-hour serum insulin (µU/ml) |
+| BMI | Body mass index |
+| DiabetesPedigreeFunction | Genetic diabetes risk score |
+| Age | Patient age in years |
 
-NumPy → For numerical computations
+---
 
-Pandas → For handling and analyzing datasets
+## Model Pipeline
 
-StandardScaler → To standardize features
+```
+diabetes.csv (768 × 8 features)
+        │
+        ▼
+Exploratory Data Analysis
+(shape, describe, value_counts, groupby mean)
+        │
+        ▼
+Separate Features (X) and Labels (Y)
+        │
+        ▼
+StandardScaler → Normalize feature values
+        │
+        ▼
+Stratified Train/Test Split (80% / 20%)
+        │
+        ▼
+SVM Classifier (Linear Kernel)
+        │
+        ├──── Training Accuracy
+        └──── Test Accuracy
+                │
+                ▼
+     New Patient Input (8 values)
+        → Standardize → Predict → Output
+```
 
-train_test_split → To split data into training and testing sets
+---
 
-svm → To build the Support Vector Machine model
+## Project Structure
 
-accuracy_score → To evaluate model performance
+```
+diabetes_prediction/
+│
+├── diabetes_prediction/
+│   ├── diabetes.csv                  # PIMA dataset
+│   ├── main.py                       # Training and prediction script
+│   └── readme.md
+│
+├── Diabetes_prediction.ipynb         # Full notebook with EDA and model
+└── README.md
+```
 
-These libraries form the foundation of the entire workflow.
+---
 
-📊 Step 2: Data Collection and Initial Analysis
+## Installation
 
-For this project, I used the PIMA Indian Diabetes Dataset, which is publicly available on Kaggle and the UCI Machine Learning Repository.
-This dataset contains key health indicators for women, such as glucose level, BMI, insulin levels, and more, along with the outcome (0 → Non-Diabetic, 1 → Diabetic).
+**Prerequisites**: Python 3.8 or higher
 
-Loading and Exploring the Dataset
+1. Clone the repository:
 
-After loading the dataset using pd.read_csv(), I explored it to understand its structure:
+```bash
+git clone https://github.com/mohankiran18/diabetes_prediction.git
+cd diabetes_prediction/diabetes_prediction
+```
 
-Used head() to preview the first 5 rows
+2. Install dependencies:
 
-Used shape to check the number of rows and columns
+```bash
+pip install numpy pandas scikit-learn
+```
 
-Used describe() for statistical insights
+---
 
-Checked the outcome distribution using value_counts()
+## Usage
 
-To get a better understanding of feature averages per class, I grouped the data using:
+**Run via script:**
 
-diabetes_dataset.groupby("Outcome").mean()
+```bash
+python main.py
+```
 
+**Run via notebook:**
 
-This helped me see which features differ most between diabetic and non-diabetic patients.
+Open `Diabetes_prediction.ipynb` in Jupyter or Google Colab and execute cells sequentially.
 
-🧹 Step 3: Data Preprocessing
+To classify a new patient, provide 8 values in this order:
 
-Before training the model, I separated the features and labels:
+```python
+input_data = (Pregnancies, Glucose, BloodPressure, SkinThickness,
+              Insulin, BMI, DiabetesPedigreeFunction, Age)
 
-X → All input features
+# Example
+input_data = (4, 110, 92, 0, 0, 37.6, 0.191, 30)
+```
 
-Y → The output label (Outcome column)
+**Output:**
 
-Since the dataset contains values of different scales, I applied data standardization using StandardScaler().
-Standardization helps the SVM perform better by scaling all features into a similar range.
+```
+The person is Non-Diabetic.
+```
 
-I used:
+or
 
-scaler.fit_transform(X)
+```
+The person is Diabetic.
+```
 
+---
 
-This method both fits and transforms the data in a single step — ensuring the model works efficiently with consistent values.
+## Results
 
-🧠 Step 4: Splitting the Dataset
+| Metric | Value |
+|---|---|
+| Training Accuracy | _Add from your output_ |
+| Test Accuracy | _Add from your output_ |
+| Train/Test Split | 80% / 20% |
+| Sampling Strategy | Stratified |
 
-Next, I divided the dataset into training and testing sets using an 80-20 split ratio:
+> Run the script and paste your printed accuracy scores here. Typical SVM performance on this dataset is 77–80% test accuracy with a linear kernel.
 
-80% for training the model
+---
 
-20% for testing its performance
+## Key Design Decisions
 
-To maintain the same class distribution in both sets, I used stratified sampling.
-This ensures that the proportion of diabetic and non-diabetic samples remains balanced across both subsets.
+**Why SVM?** SVM with a linear kernel handles binary classification on small, well-structured medical datasets effectively without overfitting. It finds an optimal decision boundary even when classes partially overlap.
 
-⚙️ Step 5: Training the Support Vector Machine Model
+**Why StandardScaler?** The 8 features span very different numerical ranges (e.g., Age vs. Insulin). Standardization ensures no single feature dominates the SVM's margin calculation.
 
-For model training, I used the SVM classifier with a linear kernel since it performs well for binary classification problems.
-After fitting the model on the training data, the SVM learned to classify new samples by finding the optimal hyperplane that separates the two classes effectively.
+**Why stratified split?** The dataset has a class imbalance (~65% non-diabetic, ~35% diabetic). Stratified sampling preserves this ratio in both training and test sets, preventing evaluation bias.
 
-📈 Step 6: Model Evaluation
+---
 
-Once the model was trained, I evaluated its performance using accuracy score.
+## Future Improvements
 
-I calculated:
+- Benchmark SVM against Random Forest, XGBoost, and Logistic Regression
+- Handle zero-value imputation (Glucose, Insulin, BMI cannot be 0 clinically)
+- Add cross-validation for more reliable performance estimates
+- Build a Streamlit interface for clinical input and prediction
+- Deploy as a REST API for integration with healthcare screening tools
 
-Accuracy on training data
+---
 
-Accuracy on testing data
+## Author
 
-This step helped me ensure that the model was not overfitting (performing well on training data but poorly on new data).
-The results were consistent, indicating that the model generalized well to unseen data.
+**Mohan Kiran**  
+B.Tech — Artificial Intelligence and Machine Learning  
+GitHub: [github.com/mohankiran18](https://github.com/mohankiran18)  
+Portfolio: [mohan-kiran.netlify.app](https://mohan-kiran.netlify.app/)
 
-🔮 Step 7: Building the Predictive System
+---
 
-Finally, I created a predictive system to test the model on custom input values.
+## License
 
-I provided a sample tuple of medical parameters:
-
-(4, 110, 92, 0, 0, 37.6, 0.191, 30)
-
-
-The process involved:
-
-Converting input into a NumPy array
-
-Reshaping it (since the model predicts for one instance at a time)
-
-Standardizing the input
-
-Predicting the result using the trained SVM model
-
-If the prediction output was 0, it indicated Non-Diabetic,
-and if it was 1, it indicated Diabetic.
-
-The system successfully predicted outcomes based on medical parameters, showing that machine learning can play an important role in healthcare analytics.
-
-✅ Conclusion
-
-Through this project, I learned how to:
-
-Collect, clean, and preprocess real-world data
-
-Train and evaluate a supervised machine learning model
-
-Implement SVM for binary classification
-
-Build a simple predictive system capable of real-time inference
-
-This project strengthened my understanding of data preprocessing, model training, and evaluation techniques in machine learning using Python.
+This project is licensed under the [MIT License](LICENSE).
